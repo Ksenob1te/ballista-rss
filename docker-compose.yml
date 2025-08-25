@@ -10,7 +10,7 @@ services:
       - compose_rabbitmq
       - compose_db
     ports:
-      - '8000:8000'
+      - '7000:8000'
 
 networks:
   default:
