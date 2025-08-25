@@ -35,7 +35,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 @app.get("/rss/{league_id}", response_class=Response)
-async def get_rss_feed(league_id: str, db_session=Depends(get_db_session)):
+async def get_rss_feed(league_id: int, db_session=Depends(get_db_session)):
     service = RSSService(db_session)
     try:
         rss_xml = await service.generate_rss(league_id)

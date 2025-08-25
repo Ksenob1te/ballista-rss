@@ -48,7 +48,7 @@ class RSSService:
         return result_str
 
 
-    async def generate_rss(self, league_id: str) -> str:
+    async def generate_rss(self, league_id: int) -> str:
         gameweeks = await self._standings_repo.get_last_n(50, league_id=league_id)
         if not gameweeks:
             raise DatabaseException(f"No gameweeks found for league {league_id}")

@@ -1,0 +1,13 @@
+services:
+  ballista-rss:
+    build:
+      context: .
+    env_file:
+      - .env.prod
+    restart: unless-stopped
+    networks:
+      - default
+
+networks:
+  default:
+    driver: bridge

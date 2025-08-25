@@ -10,7 +10,7 @@ class H2HGameweek(Base):
     __tablename__ = "h2h_gameweek_table"
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
-    league_id: Mapped[str] = mapped_column(nullable=False)
+    league_id: Mapped[int] = mapped_column(nullable=False)
     gameweek: Mapped[int] = mapped_column(nullable=False, unique=True)
     date: Mapped[datetime] = mapped_column(
         TIMESTAMP(timezone=True),

@@ -12,7 +12,7 @@ class H2HGameweekRepo:
         self.session = session
         self.logger = logging.getLogger(self.__class__.__name__)
 
-    async def create(self, league_id: str, gameweek: int, matches: List[dict], standings: List[dict]) -> H2HGameweek:
+    async def create(self, league_id: int, gameweek: int, matches: List[dict], standings: List[dict]) -> H2HGameweek:
         self.logger.debug("Creating gameweek league_id=%s gameweek=%s", league_id, gameweek)
         new_round = H2HGameweek(
             league_id=league_id,
@@ -26,7 +26,7 @@ class H2HGameweekRepo:
         self.logger.info("Created gameweek league_id=%s gameweek=%s id=%s", league_id, gameweek, new_round.id)
         return new_round
 
-    async def get_by_gameweek(self, league_id: str, gameweek: int) -> Optional[H2HGameweek]:
+    async def get_by_gameweek(self, league_id: int, gameweek: int) -> Optional[H2HGameweek]:
         self.logger.debug("Fetching single gameweek league_id=%s gameweek=%s", league_id, gameweek)
         result = await self.session.execute(
             select(H2HGameweek).where(
@@ -36,7 +36,7 @@ class H2HGameweekRepo:
         )
         return result.scalar_one_or_none()
 
-    async def get_last_n(self, n: int, league_id: str) -> List[H2HGameweek]:
+    async def get_last_n(self, n: int, league_id: int) -> List[H2HGameweek]:
         self.logger.debug("Fetching last %s gameweeks for league_id=%s", n, league_id)
         stmt = (
             select(H2HGameweek)
@@ -49,7 +49,7 @@ class H2HGameweekRepo:
         self.logger.debug("Fetched %s gameweeks for league_id=%s", len(rows), league_id)
         return rows
 
-    async def update(self, league_id: str, gameweek: int, matches: List[dict], standings: List[dict]) -> Optional[H2HGameweek]:
+    async def update(self, league_id: int, gameweek: int, matches: List[dict], standings: List[dict]) -> Optional[H2HGameweek]:
         self.logger.debug("Updating gameweek league_id=%s gameweek=%s", league_id, gameweek)
         round_obj = await self.get_by_gameweek(league_id, gameweek)
         if not round_obj:
@@ -63,14 +63,14 @@ class H2HGameweekRepo:
         self.logger.info("Updated gameweek league_id=%s gameweek=%s id=%s", league_id, gameweek, round_obj.id)
         return round_obj
 
-    async def upsert(self, league_id: str, gameweek: int, matches: List[dict], standings: List[dict]) -> H2HGameweek:
+    async def upsert(self, league_id: int, gameweek: int, matches: List[dict], standings: List[dict]) -> H2HGameweek:
         self.logger.info("Upserting gameweek league_id=%s gameweek=%s", league_id, gameweek)
         round_obj = await self.get_by_gameweek(league_id, gameweek)
         if round_obj:
             return await self.update(league_id, gameweek, matches, standings)
         return await self.create(league_id, gameweek, matches, standings)
 
-    async def delete(self, league_id: str, gameweek: int) -> bool:
+    async def delete(self, league_id: int, gameweek: int) -> bool:
         self.logger.debug("Deleting gameweek league_id=%s gameweek=%s", league_id, gameweek)
         round_obj = await self.get_by_gameweek(league_id, gameweek)
         if not round_obj:

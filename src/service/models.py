@@ -16,7 +16,7 @@ class MatchesModel(BaseModel):
 class H2HGameweekModel(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    league_id: str
+    league_id: int
     gameweek: int
     matches: List[MatchesModel]
     standings: List[Tuple[str, int]]
