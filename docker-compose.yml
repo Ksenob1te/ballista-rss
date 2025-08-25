@@ -7,7 +7,10 @@ services:
     restart: unless-stopped
     networks:
       - default
+      - compose_rabbitmq
 
 networks:
   default:
     driver: bridge
+  compose_rabbitmq:
+    external: true
