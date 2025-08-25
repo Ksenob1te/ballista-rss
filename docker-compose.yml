@@ -8,9 +8,12 @@ services:
     networks:
       - default
       - compose_rabbitmq
+      - compose_db
 
 networks:
   default:
     driver: bridge
   compose_rabbitmq:
+    external: true
+  compose_db:
     external: true
