@@ -11,6 +11,9 @@ services:
       - compose_db
     ports:
       - '7000:8000'
+    volumes:
+      - ./.local:/usr/src/ballista/.local
+      - ./src/postgre/alembic:/usr/src/ballista/src/postgre/alembic
 
 networks:
   default:
