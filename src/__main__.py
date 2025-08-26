@@ -8,9 +8,9 @@ async def test_main():
     async for db_session in get_db_session():
         service = RSSService(db_session)
 
-        example_item = {
+        h2h_example_item = {
             "gameweek": 1,
-            "league_id": "645915",
+            "league_id": 1,
             "matches": [
                 {
                     "first_contender": "Ivan",
@@ -73,9 +73,47 @@ async def test_main():
             ]
         }
 
-        print(await service.generate_rss("645915"))
+        classic_example_item = {
+            "gameweek": 1,
+            "league_id": 1,
+            "contenders": [
+                {
+                    "name": "Ivan",
+                    "score": 62,
+                    "standings": {
+                        "Saliba (ARS)": 6,
+                        "Wood (NFO)": 4,
+                        "Player3": 10,
+                        "Player4": 8,
+                        "Player5": 12,
+                        "Player6": 7,
+                        "Player7": 5,
+                        "Player8": 10
+                    }
+                },
+                {
+                    "name": "Stepan",
+                    "score": 23,
+                    "standings": {
+                        "Player1": 4,
+                        "Player2": 5,
+                        "Player3": 3,
+                        "Player4": 6,
+                        "Player5": 5,
+                        "Player6": 0,
+                        "Player7": 0,
+                        "Player8": 0
+                    }
+                }
+            ]
+        }
+
+        print(await service.create_classic_item(classic_example_item))
         await db_session.commit()
 
 
 if __name__ == "__main__":
+    from .logging_setup import setup_logging
+    setup_logging()
+
     asyncio.run(test_main())

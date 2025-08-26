@@ -12,10 +12,15 @@ async def rabbitmq_line():
 
     async def handle_event(message: dict):
         payload = message.get("payload", {})
+        header = message.get("headers", {})
+        league_type = header["type"]
         async for db_session in get_db_session():
             service = RSSService(db_session)
-            await service.create_item(payload)
-
+            if league_type == "h2h":
+                await service.create_h2h_item(payload)
+            elif league_type == "classic":
+                await service.create_classic_item(payload)
+            await db_session.commit()
     try:
         await subscribe_to_events("ballista-rss", handle_event)
     finally:
@@ -34,11 +39,22 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-@app.get("/rss/{league_id}", response_class=Response)
+@app.get("/rss/h2h/{league_id}", response_class=Response)
 async def get_rss_feed(league_id: int, db_session=Depends(get_db_session)):
     service = RSSService(db_session)
     try:
-        rss_xml = await service.generate_rss(league_id)
+        rss_xml = await service.generate_h2h_rss(league_id)
+    except DatabaseException as e:
+        return Response(content=str(e), status_code=404)
+    except Exception as e:
+        return Response(content=str(e), status_code=500)
+    return Response(content=rss_xml, media_type="application/rss+xml")
+
+@app.get("/rss/classic/{league_id}", response_class=Response)
+async def get_rss_feed(league_id: int, db_session=Depends(get_db_session)):
+    service = RSSService(db_session)
+    try:
+        rss_xml = await service.generate_classic_rss(league_id)
     except DatabaseException as e:
         return Response(content=str(e), status_code=404)
     except Exception as e:

@@ -42,7 +42,7 @@ class PostgresConfig(LocalSettings):
     host: str = Field(default="localhost", alias="POSTGRES_HOST")
     port: int = Field(default="5432", alias="POSTGRES_PORT")
     user: str = Field(default="postgres", alias="POSTGRES_USER")
-    password: str = Field(default="postgres", alias="POSTGRES_PASSWORD")
+    password: str = Field(default="pgAdminPassword", alias="POSTGRES_PASSWORD")
     db: str = Field(default="ballista-rss", alias="POSTGRES_DB")
 
     @property

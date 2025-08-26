@@ -5,6 +5,6 @@ __pycache__
 .*
 !.gitignore
 /logger.log
-/**/alembic/versions/
+/**/alembic/versions/*
 /database/
 /.local/

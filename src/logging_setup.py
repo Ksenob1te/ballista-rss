@@ -14,7 +14,7 @@ _configured = False
 def _log_unhandled_exception(exc_type, exc_value, exc_tb):
     logger = logging.getLogger('UNCAUGHT')
     formatted_tb = ''.join(traceback.format_exception(exc_type, exc_value, exc_tb))
-    logger.error('Uncaught exception:\n%s', formatted_tb)
+    logger.error('Uncaught exception with traceback:\n%s', formatted_tb)
 
 
 def setup_logging(level: int = logging.INFO):

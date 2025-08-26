@@ -1,6 +1,7 @@
 import json
 import logging
 import aio_pika
+import traceback
 from .engine import rabbitmq_manager
 
 logger = logging.getLogger("rabbit_module")
@@ -18,11 +19,11 @@ async def subscribe_to_events(queue_name: str, callback):
                 async with message.process():
                     data = json.loads(message.body)
                     headers = dict(message.headers) if message.headers else {}
-                    logger.info(f"Received message from {queue_name}: {data}, headers: {headers}")
-                    # Pass both payload and headers to callback
+                    logger.info("Received message from %s: %s, headers: %s", queue_name, data, headers)
                     await callback({"payload": data, "headers": headers})
             except Exception as e:
-                logger.exception(f"Error processing message: {e}")
+                tb = traceback.format_exc()
+                logger.error("Error processing message: %s\n%s", e, tb)
 
 async def publish_event(queue_name: str, event: dict, headers: dict = None):
     connection = await get_rabbit_connection()
@@ -36,4 +37,4 @@ async def publish_event(queue_name: str, event: dict, headers: dict = None):
         message,
         routing_key=queue_name,
     )
-    logger.info(f"Published event to {queue_name}: {event}, headers: {headers}")
+    logger.info("Published event to %s: %s, headers: %s", queue_name, event, headers)
