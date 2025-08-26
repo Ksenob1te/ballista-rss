@@ -13,7 +13,7 @@ services:
       - '7000:8000'
     volumes:
       - ./.local:/usr/src/ballista/.local
-      - ./src/postgre/alembic:/usr/src/ballista/src/postgre/alembic
+      - ./src/postgre/alembic/versions:/usr/src/ballista/src/postgre/alembic/versions
 
 networks:
   default:
