@@ -41,22 +41,23 @@ app = FastAPI(lifespan=lifespan)
 
 @app.get("/rss/h2h/{league_id}", response_class=Response)
 async def get_rss_feed(league_id: int, db_session=Depends(get_db_session)):
-    service = RSSService(db_session)
-    try:
-        rss_xml = await service.generate_h2h_rss(league_id)
-    except DatabaseException as e:
-        return Response(content=str(e), status_code=404)
-    except Exception as e:
-        return Response(content=str(e), status_code=500)
-    return Response(content=rss_xml, media_type="application/rss+xml")
-
-@app.get("/rss/classic/{league_id}", response_class=Response)
-async def get_rss_feed(league_id: int, db_session=Depends(get_db_session)):
-    service = RSSService(db_session)
-    try:
-        rss_xml = await service.generate_classic_rss(league_id)
-    except DatabaseException as e:
-        return Response(content=str(e), status_code=404)
-    except Exception as e:
-        return Response(content=str(e), status_code=500)
-    return Response(content=rss_xml, media_type="application/rss+xml")
+    pass
+    # service = RSSService(db_session)
+    # try:
+    #     rss_xml = await service.generate_h2h_rss(league_id)
+    # except DatabaseException as e:
+    #     return Response(content=str(e), status_code=404)
+    # except Exception as e:
+    #     return Response(content=str(e), status_code=500)
+    # return Response(content=rss_xml, media_type="application/rss+xml")
+#
+# @app.get("/rss/classic/{league_id}", response_class=Response)
+# async def get_rss_feed(league_id: int, db_session=Depends(get_db_session)):
+#     service = RSSService(db_session)
+#     try:
+#         rss_xml = await service.generate_classic_rss(league_id)
+#     except DatabaseException as e:
+#         return Response(content=str(e), status_code=404)
+#     except Exception as e:
+#         return Response(content=str(e), status_code=500)
+#     return Response(content=rss_xml, media_type="application/rss+xml")
