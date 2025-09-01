@@ -1,3 +1,5 @@
+from aiormq.tools import awaitable
+
 from .service.service import RSSService
 from .postgre import get_db_session, create_db_and_tables
 import asyncio
@@ -158,41 +160,42 @@ async def test_main():
             "league_id": 1,
             "contenders": [
                 {
-                    "name": "Team I",
-                    "leader": "Ivan",
+                    "name": "Team 1",
+                    "leader": "Leader 1",
                     "team_id": 1,
-                    "score": 62,
+                    "score": 1,
                     "composition": [
-                        {"name": "Saliba", "team": "ARS", "points": 6, "player_id": 1, "factor": 1},
-                        {"name": "Wood", "team": "NFO", "points": 4, "player_id": 2, "factor": 1},
-                        {"name": "Player3", "team": "TEAM3", "points": 10, "player_id": 3, "factor": 2},
+                        {"name": "Player1", "team": "TEAM1", "points": 6, "player_id": 1, "factor": 1},
+                        {"name": "Player2", "team": "TEAM2", "points": 4, "player_id": 2, "factor": 1},
+                        {"name": "Player3", "team": "TEAM3", "points": 10, "player_id": 3, "factor": 1},
                         {"name": "Player4", "team": "TEAM4", "points": 8, "player_id": 4, "factor": 1},
-                        {"name": "Player5", "team": "TEAM5", "points": 12, "player_id": 5, "factor": 2},
-                        {"name": "Player6", "team": "TEAM6", "points": 7, "player_id": 6, "factor": 2},
-                        {"name": "Player7", "team": "TEAM7", "points": 5, "player_id": 7, "factor": 2},
+                        {"name": "Player5", "team": "TEAM5", "points": 12, "player_id": 5, "factor": 1},
+                        {"name": "Player6", "team": "TEAM6", "points": 7, "player_id": 6, "factor": 1},
+                        {"name": "Player7", "team": "TEAM7", "points": 5, "player_id": 7, "factor": 1},
                         {"name": "Player8", "team": "TEAM8", "points": 10, "player_id": 8, "factor": 2}
                     ]
                 },
                 {
-                    "name": "Team S",
-                    "leader": "Stephan",
+                    "name": "Team 2",
+                    "leader": "Leader 2",
                     "team_id": 2,
-                    "score": 23,
+                    "score": 2,
                     "composition": [
-                        {"name": "Player1", "team": "TEAM1", "points": 4, "player_id": 9, "factor": 1},
-                        {"name": "Player2", "team": "TEAM2", "points": 5, "player_id": 10, "factor": 1},
-                        {"name": "Player3", "team": "TEAM3", "points": 3, "player_id": 11, "factor": 2},
-                        {"name": "Player4", "team": "TEAM4", "points": 6, "player_id": 12, "factor": 2},
-                        {"name": "Player5", "team": "TEAM5", "points": 5, "player_id": 13, "factor": 2},
-                        {"name": "Player6", "team": "TEAM6", "points": 0, "player_id": 14, "factor": 1},
-                        {"name": "Player7", "team": "TEAM7", "points": 0, "player_id": 15, "factor": 1},
-                        {"name": "Player8", "team": "TEAM8", "points": 0, "player_id": 16, "factor": 1}
+                        {"name": "Player9", "team": "TEAM1", "points": 4, "player_id": 9, "factor": 1},
+                        {"name": "Player10", "team": "TEAM2", "points": 5, "player_id": 10, "factor": 1},
+                        {"name": "Player11", "team": "TEAM3", "points": 3, "player_id": 11, "factor": 1},
+                        {"name": "Player12", "team": "TEAM4", "points": 6, "player_id": 12, "factor": 1},
+                        {"name": "Player13", "team": "TEAM5", "points": 5, "player_id": 13, "factor": 1},
+                        {"name": "Player14", "team": "TEAM6", "points": 0, "player_id": 14, "factor": 1},
+                        {"name": "Player15", "team": "TEAM7", "points": 0, "player_id": 15, "factor": 1},
+                        {"name": "Player16", "team": "TEAM8", "points": 0, "player_id": 16, "factor": 2}
                     ]
                 }
             ]
         }
 
-        print(await service.create_h2h_item(h2h_example_item))
+        # print(await service.create_h2h_item(h2h_example_item))
+        print(await service.generate_classic_report(645829))
         await db_session.commit()
 
 

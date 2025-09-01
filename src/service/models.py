@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict, field_validator
 from typing import Optional, List, Dict, Tuple
+from ..postgre import PlayerGameweek
 
 class PlayerModel(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -40,6 +41,22 @@ class H2HGameweekModel(BaseModel):
     gameweek: int
     matches: List[MatchesModel]
     contenders: List[ContendersModel]
+
+class PairResultModel(BaseModel):
+    model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
+
+    first_name: str
+    first_leader: str
+    first_score: int
+    second_name: str
+    second_leader: str
+    second_score: int
+
+    similarity: float
+    first_captain: Optional[PlayerGameweek] = None
+    second_captain: Optional[PlayerGameweek] = None
+    first_top: List[PlayerGameweek]
+    second_top: List[PlayerGameweek]
 
 # class MatchesModel(BaseModel):
 #     model_config = ConfigDict(from_attributes=True)
