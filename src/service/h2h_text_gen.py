@@ -17,14 +17,14 @@ async def form_matches_info(gw: H2HGameweek) -> str:
         total_players = max(len(match.first_contender.composition), len(match.second_contender.composition))
         similarity = intersect_amount / total_players if total_players > 0 else 0.
 
-        first_top = {p.player_gameweek for p in sorted(
+        first_top = [p.player_gameweek for p in sorted(
             match.first_contender.composition_links, key=lambda x: x.factor * x.player_gameweek.points,
             reverse=True
-        )[:3]}
-        second_top = {p.player_gameweek for p in sorted(
+        )[:3]]
+        second_top = [p.player_gameweek for p in sorted(
             match.second_contender.composition_links, key=lambda x: x.factor * x.player_gameweek.points,
             reverse=True
-        )[:3]}
+        )[:3]]
 
         first_captain = next((p.player_gameweek for p in match.first_contender.composition_links if p.factor == 2),
                              None)
@@ -53,11 +53,25 @@ async def form_matches_info(gw: H2HGameweek) -> str:
         result_text += f"{res.first_name} ({res.first_leader}) {res.first_score}:{res.second_score} {res.second_name} ({res.second_leader})\n"
         result_text += f"Similarity: {int(res.similarity)}%\n"
         if res.first_captain and res.second_captain:
-            result_text += f"Captains: {res.first_captain.name} {res.first_captain.team} {res.first_captain.points}:{res.second_captain.points} {res.second_captain.name} {res.second_captain.team}\n"
+            result_text += f"Captains: {res.first_captain.name} {res.first_captain.team} {res.first_captain.points * 2}:{res.second_captain.points * 2} {res.second_captain.name} {res.second_captain.team}\n"
         result_text += f"{res.first_name}: "
-        result_text += ", ".join([f"{p.name} {p.team} ({p.points})" for p in res.first_top])
+        result_text += ", ".join(
+            [
+                f"{p.name} {p.team} ({p.points})"
+                if p.player_id != (res.first_captain.player_id if res.first_captain else -1)
+                else f"{p.name} {p.team} ({p.points*2})"
+                for p in res.first_top
+            ]
+        )
         result_text += f"\n{res.second_name}: "
-        result_text += ", ".join([f"{p.name} {p.team} ({p.points})" for p in res.second_top])
+        result_text += ", ".join(
+            [
+                f"{p.name} {p.team} ({p.points})"
+                if p.player_id != (res.second_captain.player_id if res.second_captain else -1)
+                else f"{p.name} {p.team} ({p.points*2})"
+                for p in res.second_top
+            ]
+        )
         result_text += "\n\n"
     return result_text.strip()
 

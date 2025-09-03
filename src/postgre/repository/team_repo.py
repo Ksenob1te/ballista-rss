@@ -14,7 +14,7 @@ class TeamRepo:
         self.logger = logging.getLogger(self.__class__.__name__)
 
     async def _upsert_team_players_link(self, team_id_map: Dict[int, UUID], player_id_map: Dict[int, UUID],
-                                        team_models: List[ContendersModel], player_factor_map: Dict[int, int]) -> None:
+                                        team_models: List[ContendersModel]) -> None:
         link_inserts = []
         for team_model in team_models:
             team_db_id = team_id_map.get(team_model.team_id)
@@ -22,8 +22,9 @@ class TeamRepo:
                 continue
             for player_model in team_model.composition:
                 player_db_id = player_id_map.get(player_model.player_id)
-                player_factor = player_factor_map.get(player_model.player_id, 1)
+                player_factor = player_model.factor
                 if not player_db_id:
+                    self.logger.warning("Player ID %s not found in DB map, skipping link insert", player_model.player_id)
                     continue
                 link_inserts.append({
                     'team_gameweek_id': team_db_id,
@@ -75,7 +76,7 @@ class TeamRepo:
                 player.gameweek = team_model.gameweek
 
         player_id_map = await self._upsert_players(list(players_dict.values()))
-        player_factor_map = {p.player_id: p.factor for p in players_dict.values()}
+        # player_factor_map = {p.player_id: p.factor for p in players_dict.values()}
         stmt = insert(TeamGameweek).values(
             [
                 {
@@ -101,6 +102,6 @@ class TeamRepo:
             row.team_id: row.id
             for row in rows
         }
-        await self._upsert_team_players_link(team_id_map, player_id_map, team_models, player_factor_map)
+        await self._upsert_team_players_link(team_id_map, player_id_map, team_models)
         self.logger.debug("Upserted %s teams", len(rows))
         return team_id_map

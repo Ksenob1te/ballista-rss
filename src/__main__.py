@@ -195,7 +195,7 @@ async def test_main():
         }
 
         # print(await service.create_h2h_item(h2h_example_item))
-        print(await service.generate_classic_report(645829))
+        print(await service.generate_h2h_report(645915))
         await db_session.commit()
 
 

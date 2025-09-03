@@ -25,7 +25,7 @@ class TeamGameweekPlayer(Base):
     player_gameweek: Mapped["PlayerGameweek"] = relationship(lazy="selectin")
 
     def __repr__(self):
-        return f"<TeamGameweekPlayer(team={self.team_gameweek_id}, player={self.player_gameweek_id}, mult={self.factor})>"
+        return f"<TeamGameweekPlayer(team={self.team_gameweek_id}, player={self.player_gameweek_id}, factor={self.factor})>"
 
 
 
