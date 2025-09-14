@@ -133,3 +133,9 @@ async def form_top_pts(gw: H2HGameweek) -> str:
         total = match.first_contender.points + match.second_contender.points
         result_text += f"{total}: {match.first_contender.name} {match.first_contender.points}:{match.second_contender.points} {match.second_contender.name}\n"
     return result_text.strip()
+
+async def form_leaderboard(gw: H2HGameweek) -> str:
+    result_text = "LEADERBOARD\n"
+    for index, contender in enumerate(sorted(gw.contenders, key=lambda x: x.points, reverse=True)):
+        result_text += f"{index + 1}. {contender.team.name} ({contender.team.leader}) {contender.points} pts\n"
+    return result_text.strip()

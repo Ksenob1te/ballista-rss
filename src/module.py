@@ -20,6 +20,7 @@ async def rabbitmq_line():
                 await service.create_h2h_item(payload)
             elif league_type == "classic":
                 await service.create_classic_item(payload)
+            await service.send_webhook(int(payload['league_id']), league_type)
             await db_session.commit()
     try:
         await subscribe_to_events("ballista-rss", handle_event)

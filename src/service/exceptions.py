@@ -3,3 +3,6 @@ class RSSServiceException(Exception):
 
 class DatabaseException(RSSServiceException):
     pass
+
+class ExternalAPIException(RSSServiceException):
+    pass
